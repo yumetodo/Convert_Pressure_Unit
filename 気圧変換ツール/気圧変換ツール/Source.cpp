@@ -1,157 +1,143 @@
-#include<stdio.h>
-#include<stdlib.h>
+ï»¿#include<iostream>
+#include<string>
+#include<array>
+#include<typeinfo>
+#include<cstdio>
+#include<cstdlib>
 #include<limits.h>//in gcc
 #include<errno.h>//in gcc
-#ifndef __cplusplus
-#define nullptr NULL
-#endif
-
-int get_integer_num(const int max, const int min){
-	//‹@”\F•W€“ü—Í‚ğ”š‚É•ÏŠ·‚·‚éB
-	//ˆø”F–ß‚è’l‚ÌÅ‘å’l,–ß‚è’l‚ÌÅ¬’l
-	//–ß‚è’lF“ü—Í‚µ‚½”šAƒGƒ‰[‚Í-1,EOF‚Ì‚Æ‚«‚ÍEOF
-	char s[100];
-	char *endptr;
-	if (nullptr == fgets(s, 100, stdin)){
-		if (feof(stdin)){//ƒGƒ‰[‚ÌŒ´ˆö‚ªEOF‚©Ø‚è•ª‚¯
-			return EOF;
-		}
-		return INT_MIN;
-	}
-	if ('\n' == s[0]) return INT_MIN;
-	errno = 0;
-	const long t = strtol(s, &endptr, 10);
-	if (0 != errno || '\n' != *endptr || t < min || max < t)
-		return INT_MIN;
-	return (int)t;
+typedef enum pressure_unit{
+	UNKNOWN = 0,
+	MMHG,
+	HPA,
+	ATM,
+	BAR
+} pressure_unit_t;
+typedef struct{
+	double pressure;
+	pressure_unit_t in_unit;
+	pressure_unit_t out_unit;
+}input_pressure_data_t;
+template <typename T, typename ...Args>
+inline std::array<T, sizeof...(Args)> make_array(Args &&...args) {
+	return std::array<T, sizeof...(Args)>{ std::forward<Args>(args)... };
 }
-
-int getnum_customized_type_int(const int max, const int min){
-	if (max < min)   return -1;
-	int flag0;
-	bool temp_judge;
+namespace pressure_units{
+	static const auto units = make_array<std::string>("mmHg", "hPa", "atm", "bar");
+	class basic_pressure_t
+	{
+	public:
+		basic_pressure_t(double hPa){
+			this->hPa = hPa;
+		}
+		basic_pressure_t(double in_pressure, const pressure_unit_t unit){
+			hPa = 0;
+			switch (unit)
+			{
+			case MMHG:
+				hPa = in_pressure * 1013.25 / 760;
+				break;
+			case HPA:
+				hPa = in_pressure;
+				break;
+			case ATM:
+				hPa = in_pressure * 1013.25;
+				break;
+			case BAR:
+				hPa = in_pressure * 1000;
+				break;
+			default:
+				throw "unknown units";
+				break;
+			}
+			mmHg = (MMHG != unit) ? hPa * 760 / 1013.25 : in_pressure;
+			atm = (ATM != unit) ? hPa / 1013.25 : in_pressure;
+			bar = (BAR != unit) ? hPa / 1000 : in_pressure;
+		}
+		std::string to_string(const pressure_unit_t unit) const{
+			std::string re = "";
+			switch (unit)
+			{
+			case MMHG:
+				re += std::to_string(mmHg);
+				break;
+			case HPA:
+				re += std::to_string(hPa);
+				break;
+			case ATM:
+				re += std::to_string(atm);
+				break;
+			case BAR:
+				re += std::to_string(bar);
+				break;
+			default:
+				throw "unknown units";
+				break;
+			}
+			re += (UNKNOWN == unit) ? "" : units.at(unit - 1);
+			return re;
+		}
+	private:
+		double hPa, mmHg, atm, bar;
+	};
+}
+pressure_unit_t to_pressure_unit(const std::string& in_str, size_t* _Idx = nullptr){
+	using namespace pressure_units;
+	if (0 == in_str.length()) return UNKNOWN;
+	//static const auto units = make_array<std::string>("mmHg", "hPa", "atm", "bar");
+	std::string::size_type place = 0, i = 0;
+	for (auto& u : units){
+		place = in_str.find(u);
+		if (0 == place) break;
+		++i;
+	}
+	if (0 != place) return UNKNOWN;
+	if (nullptr != _Idx) *_Idx = units.at(i).length();//in_strä¸­ã®key(units[i])ã®ã™ãå¾Œã®è¦ç´ ç•ªå·ã‚’å¼•æ•°çµŒç”±ã§è¿”ã™
+	return static_cast<pressure_unit_t>(i + 1);
+}
+template <typename T_>
+pressure_unit_t ask_unit(T_ pressure){
+	using namespace std;
+	string in_unit_str;
+	in_unit_str.reserve(10);
+	pressure_unit_t re;
 	do{
-		flag0 = get_integer_num(max, min);
-		temp_judge = (INT_MIN == flag0);
-		if (temp_judge){
-			system("cls");
-			puts("Ä“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
-		}
-	} while (temp_judge);
-	return flag0;
+		cout << pressure << "ã®å˜ä½ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„" << endl;
+		cout << "mmHg, hPa, atm, bar" << endl;
+		getline(cin, in_unit_str);
+		re = to_pressure_unit(in_unit_str);
+	} while (UNKNOWN == re);
+	return re;
 }
-
-
-double getnum(const double max, const double min, double* isError){
-	//‹@”\F•W€“ü—Í‚ğ”š‚É•ÏŠ·‚·‚éB
-	//ˆø”F–ß‚è’l‚ÌÅ‘å’l,–ß‚è’l‚ÌÅ¬’l
-	//–ß‚è’lF“ü—Í‚µ‚½”šAƒGƒ‰[‚Í-1,EOF‚Ì‚Æ‚«‚ÍEOF
-	char s[100];
-	char *endptr;
-	if (nullptr == fgets(s, 100, stdin)){
-		if (nullptr != isError) *isError = -1;
-		return 0;
-	}
-	if ('\n' == s[0]){
-		if (nullptr != isError) *isError = -1;
-		return 0;
-	}
-	errno = 0;
-	const double t = strtod(s, &endptr);
-	if (0 != errno || '\n' != *endptr || t < min || max < t)
-		if (nullptr != isError) *isError = -1;
-	return t;
+void split_into_pressure_data(input_pressure_data_t& data, const std::string& in_str){
+	std::string::size_type in_unit_str_at = 0, out_unit_str_at = 0;
+	data.pressure = stod(in_str, &in_unit_str_at);//doubleã«å¤‰æ›
+	const pressure_unit_t in_unit_temp = to_pressure_unit(in_str.substr(in_unit_str_at), &out_unit_str_at);
+	data.in_unit = (UNKNOWN == in_unit_temp) ? ask_unit(data.pressure) : in_unit_temp;
+	//in_unitã§ask_unitã‚’å‘¼ã³å‡ºã—ã¦ã„ã‚‹ãªã‚‰out_unitã§ã‚‚å‘¼ã¶å¿…è¦ãŒã‚ã‚‹
+	const pressure_unit_t out_unit_temp = (UNKNOWN == in_unit_temp) ? ask_unit("å¤‰æ›å¾Œ") : to_pressure_unit(in_str.substr(in_unit_str_at + out_unit_str_at + 2));
+	data.out_unit = (UNKNOWN == out_unit_temp) ? ask_unit("å¤‰æ›å¾Œ") : out_unit_temp;
 }
-
-double getnum_customized_type_double(const double max, const double min){
-	if (max < min)   return -1;
-	double flag0 = 0;
-	double return_num;
-	bool temp_judge;
-	do{
-		return_num = getnum(max, min, &flag0);
-		temp_judge = (-1 == flag0);
-		if (temp_judge){
-			//system("cls");
-			puts("Ä“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
-		}
-	} while (temp_judge);
-	return return_num;
-}
-
 void common_message(void){
-	printf("‹Cˆ³•ÏŠ·ƒc[ƒ‹\n\n");
+	printf("æ°—åœ§å¤‰æ›ãƒ„ãƒ¼ãƒ«\n\n");
 }
-
-void hPa_to_mmHg(void){
-	printf("‹Cˆ³(hPa)‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n");
-	double Pa = getnum_customized_type_double(5000, 0);
-	system("cls");
-	double calc_mmHg = Pa * 760 / 1013;
+void input(input_pressure_data_t& data){
+	using namespace std;
 	common_message();
-	printf("%fhPa‚Í%fmmHg‚Å‚·B\n", Pa, calc_mmHg);
+	cout << "æ°—åœ§ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„" << endl;
+	string in_str;
+	in_str.reserve(15);
+	getline(cin, in_str);
+	split_into_pressure_data(data, in_str);
 }
-
-void mmHg_to_hPa(void){
-	printf("‹Cˆ³(mmHg)‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n");
-	double mmHg = getnum_customized_type_double(5000, 0);
-	system("cls");
-	double calc_Pa = mmHg * 1013 / 760;
-	common_message();
-	printf("%fmmHg‚Í%fPa‚Å‚·B\n", mmHg, calc_Pa);
+std::string convert(const input_pressure_data_t& data){
+	using namespace pressure_units;
+	basic_pressure_t in(data.pressure, data.in_unit);
+	return in.to_string(data.out_unit);
 }
-
-void clear_screen(void){
-	system("pause");
-	system("cls");
-}
-
-void roop(void){
-	int flag = 0;
-	int flag2;
-	int end = 0;
-	do{
-		common_message();
-		switch (flag){
-		case 0:{
-			flag2 = 0;
-			printf("Pa‚©‚çmmHg‚É•ÏŠ·‚·‚éê‡‚Í‚PAmmHg‚©‚çPa‚É•ÏŠ·‚·‚éê‡‚Í‚Q‚ğ“ü—Í‚µ‚ÄEnterƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B\n"
-				"‰½‚à‚¹‚¸I—¹‚·‚éê‡‚Í‚R‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n");
-			flag = getnum_customized_type_int(3, 1);
-			system("cls");
-			break;
-		}
-		case 1:{
-			hPa_to_mmHg();
-			flag = 4;
-			clear_screen();
-			break;
-		}
-		case 2:{
-			mmHg_to_hPa();
-			flag = 4;
-			clear_screen();
-			break;
-		}
-		case 3:{
-			end = 1;
-			break;
-		}
-		case 4:{
-			printf("ŒvZ‚ğ‘±‚¯‚Ü‚·‚©H\n‚Í‚¢c‚P@‚¢‚¢‚¦c‚Q\n");
-			flag2 = getnum_customized_type_int(2, 1);
-			if (flag2 == 1) flag = 0;
-			if (flag2 == 2) flag = 3;
-			system("cls");
-			break;
-		}
-		default:
-			break;
-		}
-	} while (end == 0);
-}
-
 int main(void){
-	roop();
+	input_pressure_data_t data;
+	input(data);
+	std::cout << convert(data) << std::endl;
 	return 0;
 }
