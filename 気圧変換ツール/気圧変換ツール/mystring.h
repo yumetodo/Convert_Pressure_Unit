@@ -1,4 +1,4 @@
-#ifndef _MYTSTRING_H
+ï»¿#ifndef _MYTSTRING_H
 #define _MYSTRING_H
 #if _MSC_VER > 1000
 #pragma once
@@ -21,28 +21,28 @@
 #endif //UNICODE || _UNICODE
 #endif // _INC_TCHAR
 
-/// <summary>wchar_t* ‚©‚ç char* ‚Ö‚Ì•ÏŠ·‚ğs‚¤</summary>
-/// <param name="pSrc">•ÏŠ·‚·‚éwchar_tŒ^‚Ì•¶š—ñ</param>
-/// <param name="pDest">•ÏŠ·Œ‹‰Ê‚ÌcharŒ^•¶š—ñ</param>
-/// <param name="sDestSize">pDest‚ÌƒTƒCƒY</param>
-/// <returns>0:³í,‚»‚Ì‘¼:ˆÙí</returns>
+/// <summary>wchar_t* ã‹ã‚‰ char* ã¸ã®å¤‰æ›ã‚’è¡Œã†</summary>
+/// <param name="pSrc">å¤‰æ›ã™ã‚‹wchar_tå‹ã®æ–‡å­—åˆ—</param>
+/// <param name="pDest">å¤‰æ›çµæœã®charå‹æ–‡å­—åˆ—</param>
+/// <param name="sDestSize">pDestã®ã‚µã‚¤ã‚º</param>
+/// <returns>0:æ­£å¸¸,ãã®ä»–:ç•°å¸¸</returns>
 int wchartToChar(const wchar_t* pSrc, char* pDest, const size_t sDestSize);
 
-/// <summary>char* ‚©‚ç wchar_t* ‚Ö‚Ì•ÏŠ·‚ğs‚¤</summary>
-/// <param name="pSrc">•ÏŠ·‚·‚écharŒ^‚Ì•¶š—ñ</param>
-/// <param name="pDest">•ÏŠ·Œ‹‰Ê‚Ìwchar_tŒ^•¶š—ñ</param>
-/// <param name="sDestSize">pDest‚ÌƒTƒCƒY</param>
-/// <returns>0:³í,‚»‚Ì‘¼:ˆÙí</returns>
+/// <summary>char* ã‹ã‚‰ wchar_t* ã¸ã®å¤‰æ›ã‚’è¡Œã†</summary>
+/// <param name="pSrc">å¤‰æ›ã™ã‚‹charå‹ã®æ–‡å­—åˆ—</param>
+/// <param name="pDest">å¤‰æ›çµæœã®wchar_tå‹æ–‡å­—åˆ—</param>
+/// <param name="sDestSize">pDestã®ã‚µã‚¤ã‚º</param>
+/// <returns>0:æ­£å¸¸,ãã®ä»–:ç•°å¸¸</returns>
 int charToWchart(const char* pSrc, wchar_t* pDest, const size_t sDestSize);
 
-/// <summary>ƒƒCƒh•¶š—ñ‚©‚çƒ}ƒ‹ƒ`ƒoƒCƒg•¶š—ñ‚Ö‚Ì•ÏŠ·‚ğs‚¤BƒƒP[ƒ‹ˆË‘¶</summary>
-/// <param name="src">•ÏŠ·‚·‚éstd::string</param>
-/// <param name="dest">•ÏŠ·Œ‹‰Ê‚Ìstd::wstring</param>
+/// <summary>ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã‹ã‚‰ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—åˆ—ã¸ã®å¤‰æ›ã‚’è¡Œã†ã€‚ãƒ­ã‚±ãƒ¼ãƒ«ä¾å­˜</summary>
+/// <param name="src">å¤‰æ›ã™ã‚‹std::string</param>
+/// <param name="dest">å¤‰æ›çµæœã®std::wstring</param>
 void WstrToStr(const std::wstring &src, std::string &dest);
 
-/// <summary>ƒ}ƒ‹ƒ`ƒoƒCƒg•¶š—ñ‚©‚çƒƒCƒh•¶š—ñ‚Ö‚Ì•ÏŠ·‚ğs‚¤BƒƒP[ƒ‹ˆË‘¶</summary>
-/// <param name="src">•ÏŠ·‚·‚éstd::wstring</param>
-/// <param name="dest">•ÏŠ·Œ‹‰Ê‚Ìstd::string</param>
+/// <summary>ãƒãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—åˆ—ã‹ã‚‰ãƒ¯ã‚¤ãƒ‰æ–‡å­—åˆ—ã¸ã®å¤‰æ›ã‚’è¡Œã†ã€‚ãƒ­ã‚±ãƒ¼ãƒ«ä¾å­˜</summary>
+/// <param name="src">å¤‰æ›ã™ã‚‹std::wstring</param>
+/// <param name="dest">å¤‰æ›çµæœã®std::string</param>
 void StrToWstr(const std::string &src, std::wstring &dest);
 inline void WstrToTstr(const std::wstring& src, std::tstring& dest){
 #ifdef _UNICODE
@@ -51,11 +51,47 @@ inline void WstrToTstr(const std::wstring& src, std::tstring& dest){
 	WstrToStr(src, dest);
 #endif
 }
+std::tstring WstrToTstr(const std::wstring& src) {
+#ifdef _UNICODE
+	return src;
+#else
+	std::tstring dest;
+	WstrToStr(src, dest);
+	return dest;
+#endif
+}
 inline void StrToTstr(const std::string& src, std::tstring& dest){
 #ifdef _UNICODE
 	StrToWstr(src, dest);
 #else
 	dest = src;
+#endif
+}
+std::tstring StrToTstr(const std::string& src) {
+#ifdef _UNICODE
+	std::tstring dest;
+	StrToWstr(src, dest);
+	return dest;
+#else
+	return src;
+#endif
+}
+std::string TstrToStr(const std::tstring& src) {
+#ifdef _UNICODE
+	std::string dest;
+	WstrToStr(src, dest);
+	return dest;
+#else
+	return src;
+#endif
+}
+std::wstring TstrToWstr(const std::tstring& src) {
+#ifdef _UNICODE
+	return src;
+#else
+	std::wstring dest;
+	StrToWstr(src, dest);
+	return dest;
 #endif
 }
 #endif //_MYTSTRING_H

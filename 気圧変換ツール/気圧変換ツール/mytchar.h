@@ -1,4 +1,4 @@
-#ifndef _MY_INC_TCHAR_H
+﻿#ifndef _MY_INC_TCHAR_H
 #define _MY_INC_TCHAR_H
 #if _MSC_VER > 1000
 #pragma once

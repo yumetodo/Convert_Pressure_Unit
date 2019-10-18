@@ -1,0 +1,99 @@
+yumetodo@yumetodo-MSI MINGW32 /c/Users/yumetodo/Documents/git/Convert_Pressure_Unit2/気圧変換ツール
+$ make
+g++ 気圧変換ツール/Source.cpp 気圧変換ツール/mystring.cpp -o Convert_Pressure_Unit2.exe -g -O0 --input-charset=utf-8 -fexec-charset=CP932 -Wall -std=c++11
+In file included from 気圧変換ツール/mystring.h:8:0,
+                 from 気圧変換ツール/Source.cpp:3:
+気圧変換ツール/mytchar.h:71:28: error: 'std::to_tstring' declared as an 'inline' variable
+  inline tstring to_tstring(_Longlong value){
+                            ^
+気圧変換ツール/mytchar.h:71:28: error: 'std::tstring std::to_tstring' redeclared as different kind of symbol
+気圧変換ツール/mytchar.h:68:17: note: previous declaration 'std::tstring std::to_tstring(long unsigned int)'
+  inline tstring to_tstring(unsigned long value){
+                 ^
+気圧変換ツール/mytchar.h:71:28: error: '_Longlong' was not declared in this scope
+  inline tstring to_tstring(_Longlong value){
+                            ^
+気圧変換ツール/mytchar.h:74:28: error: 'std::to_tstring' declared as an 'inline' variable
+  inline tstring to_tstring(_ULonglong value){
+                            ^
+気圧変換ツール/mytchar.h:74:28: error: 'std::tstring std::to_tstring' redeclared as different kind of symbol
+気圧変換ツール/mytchar.h:68:17: note: previous declaration 'std::tstring std::to_tstring(long unsigned int)'
+  inline tstring to_tstring(unsigned long value){
+                 ^
+気圧変換ツール/mytchar.h:74:28: error: '_ULonglong' was not declared in this scope
+  inline tstring to_tstring(_ULonglong value){
+                            ^
+In file included from 気圧変換ツール/mystring.h:8:0,
+                 from 気圧変換ツール/mystring.cpp:5:
+気圧変換ツール/mytchar.h:71:28: error: 'std::to_tstring' declared as an 'inline' variable
+  inline tstring to_tstring(_Longlong value){
+                            ^
+気圧変換ツール/mytchar.h:71:28: error: 'std::tstring std::to_tstring' redeclared as different kind of symbol
+気圧変換ツール/mytchar.h:68:17: note: previous declaration 'std::tstring std::to_tstring(long unsigned int)'
+  inline tstring to_tstring(unsigned long value){
+                 ^
+気圧変換ツール/mytchar.h:71:28: error: '_Longlong' was not declared in this scope
+  inline tstring to_tstring(_Longlong value){
+                            ^
+気圧変換ツール/mytchar.h:74:28: error: 'std::to_tstring' declared as an 'inline' variable
+  inline tstring to_tstring(_ULonglong value){
+                            ^
+気圧変換ツール/mytchar.h:74:28: error: 'std::tstring std::to_tstring' redeclared as different kind of symbol
+気圧変換ツール/mytchar.h:68:17: note: previous declaration 'std::tstring std::to_tstring(long unsigned int)'
+  inline tstring to_tstring(unsigned long value){
+                 ^
+気圧変換ツール/mytchar.h:74:28: error: '_ULonglong' was not declared in this scope
+  inline tstring to_tstring(_ULonglong value){
+                            ^
+気圧変換ツール/mystring.cpp: In function 'int wchartToChar(const wchar_t*, char*, size_t)':
+気圧変換ツール/mystring.cpp:27:40: error: invalid conversion from 'size_t {aka unsigned int}' to 'const wchar_t*' [-fpermissive]
+  return wcstombs(pDest, sDestSize, pSrc);
+                                        ^
+In file included from C:/msys64/mingw32/include/c++/4.9.2/cstdlib:72:0,
+                 from C:/msys64/mingw32/include/c++/4.9.2/ext/string_conversions.h:41,
+                 from C:/msys64/mingw32/include/c++/4.9.2/bits/basic_string.h:2850,
+                 from C:/msys64/mingw32/include/c++/4.9.2/string:52,
+                 from 気圧変換ツール/mystring.h:7,
+                 from 気圧変換ツール/mystring.cpp:5:
+C:/msys64/mingw32/i686-w64-mingw32/include/stdlib.h:441:18: note: initializing argument 2 of 'size_t wcstombs(char*, const wchar_t*, size_t)'
+   size_t __cdecl wcstombs(char * __restrict__ _Dest,const wchar_t * __restrict__ _Source,size_t _MaxCount) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
+                  ^
+気圧変換ツール/mystring.cpp:27:40: error: invalid conversion from 'const wchar_t*' to 'size_t {aka unsigned int}' [-fpermissive]
+  return wcstombs(pDest, sDestSize, pSrc);
+                                        ^
+In file included from C:/msys64/mingw32/include/c++/4.9.2/cstdlib:72:0,
+                 from C:/msys64/mingw32/include/c++/4.9.2/ext/string_conversions.h:41,
+                 from C:/msys64/mingw32/include/c++/4.9.2/bits/basic_string.h:2850,
+                 from C:/msys64/mingw32/include/c++/4.9.2/string:52,
+                 from 気圧変換ツール/mystring.h:7,
+                 from 気圧変換ツール/mystring.cpp:5:
+C:/msys64/mingw32/i686-w64-mingw32/include/stdlib.h:441:18: note: initializing argument 3 of 'size_t wcstombs(char*, const wchar_t*, size_t)'
+   size_t __cdecl wcstombs(char * __restrict__ _Dest,const wchar_t * __restrict__ _Source,size_t _MaxCount) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
+                  ^
+気圧変換ツール/mystring.cpp: In function 'int charToWchart(const char*, wchar_t*, size_t)':
+気圧変換ツール/mystring.cpp:43:40: error: invalid conversion from 'size_t {aka unsigned int}' to 'const char*' [-fpermissive]
+  return mbstowcs(pDest, sDestSize, pSrc);
+                                        ^
+In file included from C:/msys64/mingw32/include/c++/4.9.2/cstdlib:72:0,
+                 from C:/msys64/mingw32/include/c++/4.9.2/ext/string_conversions.h:41,
+                 from C:/msys64/mingw32/include/c++/4.9.2/bits/basic_string.h:2850,
+                 from C:/msys64/mingw32/include/c++/4.9.2/string:52,
+                 from 気圧変換ツール/mystring.h:7,
+                 from 気圧変換ツール/mystring.cpp:5:
+C:/msys64/mingw32/i686-w64-mingw32/include/stdlib.h:379:18: note: initializing argument 2 of 'size_t mbstowcs(wchar_t*, const char*, size_t)'
+   size_t __cdecl mbstowcs(wchar_t * __restrict__ _Dest,const char * __restrict__ _Source,size_t _MaxCount);
+                  ^
+気圧変換ツール/mystring.cpp:43:40: error: invalid conversion from 'const char*' to 'size_t {aka unsigned int}' [-fpermissive]
+  return mbstowcs(pDest, sDestSize, pSrc);
+                                        ^
+In file included from C:/msys64/mingw32/include/c++/4.9.2/cstdlib:72:0,
+                 from C:/msys64/mingw32/include/c++/4.9.2/ext/string_conversions.h:41,
+                 from C:/msys64/mingw32/include/c++/4.9.2/bits/basic_string.h:2850,
+                 from C:/msys64/mingw32/include/c++/4.9.2/string:52,
+                 from 気圧変換ツール/mystring.h:7,
+                 from 気圧変換ツール/mystring.cpp:5:
+C:/msys64/mingw32/i686-w64-mingw32/include/stdlib.h:379:18: note: initializing argument 3 of 'size_t mbstowcs(wchar_t*, const char*, size_t)'
+   size_t __cdecl mbstowcs(wchar_t * __restrict__ _Dest,const char * __restrict__ _Source,size_t _MaxCount);
+                  ^
+GNUmakefile:32: ターゲット 'Convert_Pressure_Unit2.exe' のレシピで失敗しました
+make: *** [Convert_Pressure_Unit2.exe] エラー 1

@@ -1,10 +1,10 @@
-﻿#include<Windows.h>
-#include<iostream>
-#include"mystring.h"
-#include<array>
-#include<cstdlib>
-#include<limits.h>//in gcc
-#include<errno.h>//in gcc
+﻿#include <Windows.h>
+#include <iostream>
+#include "mystring.h"
+#include <array>
+#include <cstdlib>
+#include <limits.h>//in gcc
+#include <errno.h>//in gcc
 #ifdef _UNICODE
 #define CF_T_TEXT CF_UNICODETEXT
 #else
